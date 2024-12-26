@@ -3,38 +3,59 @@
 
 const int WINDOW_W = 800;
 const int WINDOW_H = 600;
-const int GRID_SIZE = 8;
+const int CELLS_PER_AXIS = 8;
+const int PADDING = 20;
 
-int main()
-{
-    if(SDL_Init(SDL_INIT_VIDEO) != 0)
-    {
+void drawGrid(SDL_Renderer* renderer, int x, int y, int cellSize, int n) {
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+
+    for(int i = 0; i < n + 1; i++) {
+        SDL_RenderDrawLine(renderer, x + i * cellSize, y, x + i * cellSize, y + n * cellSize);
+    }
+
+    for(int j = 0; j < n + 1; j++) {
+        SDL_RenderDrawLine(renderer, x, y + j * cellSize, x + n * cellSize, y + j * cellSize);
+    }
+}
+
+int main() {
+    if(SDL_Init(SDL_INIT_VIDEO) != 0) {
         std::cerr << "SDL Init Error: " << SDL_GetError() << std::endl;
         return 1;
     }
 
     SDL_Window* window = SDL_CreateWindow("grid", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_W, WINDOW_H, SDL_WINDOW_SHOWN);
-    if(!window)
-    {
+    if(!window) {
         std::cerr << "Window Creation Error: " << SDL_GetError() << std::endl;
         SDL_Quit();
         return 1;
     }
 
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    if(!renderer)
-    {
+    if(!renderer) {
         std::cerr << "Renderer Creation Error: " << SDL_GetError() << std::endl;
         SDL_DestroyWindow(window);
         SDL_Quit();
         return 1;
     }
 
+    if(WINDOW_H < WINDOW_W) {
+        int gridSize = WINDOW_H - 2 * PADDING;
+        int cellSize = gridSize / CELLS_PER_AXIS;
+        int x = (WINDOW_W - gridSize) / 2;
+        drawGrid(renderer, x, PADDING, cellSize, CELLS_PER_AXIS);
+        SDL_RenderPresent(renderer);
+    } else {
+        int gridSize = WINDOW_W - 2 * PADDING;
+        int cellSize = gridSize / CELLS_PER_AXIS;
+        int y = (WINDOW_H - gridSize) / 2;
+        drawGrid(renderer, PADDING, y, cellSize, CELLS_PER_AXIS);
+        SDL_RenderPresent(renderer);
+    }
+
     SDL_Event event;
-    while(true)
-    {
-        while(SDL_PollEvent(&event))
-        {
+    while(true) {
+        while(SDL_PollEvent(&event)) {
             if(event.type == SDL_QUIT) goto Quit;
         }
     }
