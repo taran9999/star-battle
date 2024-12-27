@@ -1,22 +1,11 @@
 #include <SDL2/SDL.h>
 #include <iostream>
+#include "grid.hpp"
 
 const int WINDOW_W = 800;
 const int WINDOW_H = 600;
 const int CELLS_PER_AXIS = 8;
 const int PADDING = 20;
-
-void drawGrid(SDL_Renderer* renderer, int x, int y, int cellSize, int n) {
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-
-    for(int i = 0; i < n + 1; i++) {
-        SDL_RenderDrawLine(renderer, x + i * cellSize, y, x + i * cellSize, y + n * cellSize);
-    }
-
-    for(int j = 0; j < n + 1; j++) {
-        SDL_RenderDrawLine(renderer, x, y + j * cellSize, x + n * cellSize, y + j * cellSize);
-    }
-}
 
 int main() {
     if(SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -43,13 +32,17 @@ int main() {
         int gridSize = WINDOW_H - 2 * PADDING;
         int cellSize = gridSize / CELLS_PER_AXIS;
         int x = (WINDOW_W - gridSize) / 2;
-        drawGrid(renderer, x, PADDING, cellSize, CELLS_PER_AXIS);
+        // drawGrid(renderer, x, PADDING, cellSize, CELLS_PER_AXIS);
+        Grid grid(renderer, x, PADDING, CELLS_PER_AXIS, CELLS_PER_AXIS, cellSize, cellSize);
+        grid.render();
         SDL_RenderPresent(renderer);
     } else {
         int gridSize = WINDOW_W - 2 * PADDING;
         int cellSize = gridSize / CELLS_PER_AXIS;
         int y = (WINDOW_H - gridSize) / 2;
-        drawGrid(renderer, PADDING, y, cellSize, CELLS_PER_AXIS);
+        // drawGrid(renderer, PADDING, y, cellSize, CELLS_PER_AXIS);
+        Grid grid(renderer, PADDING, y, CELLS_PER_AXIS, CELLS_PER_AXIS, cellSize, cellSize);
+        grid.render();
         SDL_RenderPresent(renderer);
     }
 
