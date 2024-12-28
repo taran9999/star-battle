@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 #include "grid.hpp"
+#include "puzzle.hpp"
 
 const int WINDOW_W = 800;
 const int WINDOW_H = 600;
@@ -45,6 +46,10 @@ int main() {
         grid.render();
         SDL_RenderPresent(renderer);
     }
+
+    Puzzle puzzle(CELLS_PER_AXIS);
+    puzzle.generate();
+    puzzle.printCells();
 
     SDL_Event event;
     while(true) {
