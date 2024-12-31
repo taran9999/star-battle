@@ -38,4 +38,38 @@ void Puzzle::generate() {
     std::cout << std::endl;
 
     // 2. For the remaining cells, take a random value from surrounding cells
+    std::uniform_int_distribution<int> d(0, 3);
+    std::vector<int> x_dir {-1, 0, 0, 1};
+    std::vector<int> y_dir {0, -1, 1, 0};
+
+    unsigned int its = 0;
+    while(availableCells.size() > 0) {
+        auto pos = availableCells.front();
+        auto currRow = pos.first;
+        auto currCol = pos.second;
+        availableCells.pop_front();
+
+        auto dir_idx = d(g);
+        auto dx = x_dir[dir_idx];
+        auto dy = y_dir[dir_idx];
+        while((currRow == 0 && dx == -1) || (currCol == 0 && dy == -1) || (currRow == (int)cells.size() - 1 && dx == 1) || (currCol == (int)cells[0].size() - 1 && dy == 1)) {
+            dir_idx = d(g);
+            dx = x_dir[dir_idx];
+            dy = y_dir[dir_idx];
+        }
+
+        cells[currRow][currCol] = cells[currRow + dx][currCol + dy];
+        
+        if(cells[currRow][currCol] == 0) {
+            std::cout << "(" << currRow << ", " << currCol << ") remains free\n";
+            availableCells.push_back(pos);
+        } else {
+            std::cout << "(" << currRow << ", " << currCol << ") assigned to region " << cells[currRow][currCol] << "\n";
+        }
+
+        its++;
+    }
+    std::cout << "\n" << (cells.size() - 1) * cells[0].size() << " cells assigned in " << its << " iterations\n" << std::endl;
+
+    // 3. Solve (validate that a single solution exists)
 }
