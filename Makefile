@@ -4,7 +4,7 @@ LXXFLAGS = -lSDL2
 
 TARGET = main
 
-SRCS = main.cpp grid.cpp puzzle.cpp
+SRCS = main.cpp grid.cpp puzzle.cpp solver.cpp
 OBJS = $(SRCS:.cpp=.o)
 
 all: $(TARGET)

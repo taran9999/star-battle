@@ -2,6 +2,7 @@
 #include <iostream>
 #include "grid.hpp"
 #include "puzzle.hpp"
+#include "solver.hpp"
 
 const int WINDOW_W = 800;
 const int WINDOW_H = 600;
@@ -50,6 +51,8 @@ int main() {
     Puzzle puzzle(CELLS_PER_AXIS);
     puzzle.generate();
     puzzle.printCells();
+    Solver solver;
+    auto solutions = solver.solve(puzzle);
 
     SDL_Event event;
     while(true) {
