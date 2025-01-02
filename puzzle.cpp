@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <random>
 
-Puzzle::Puzzle(int n) : cells(n, std::vector<int>(n)) { srand(42); }
+Puzzle::Puzzle(int n) : cells(n, std::vector<int>(n)), n(n) { srand(42); }
 
 void Puzzle::printCells() {
     for(unsigned int row = 0; row < cells.size(); row++) {
@@ -19,15 +19,15 @@ void Puzzle::printCells() {
 
 void Puzzle::generate() {
     std::deque<std::pair<int, int>> availableCells;
-    for(unsigned int row = 0; row < cells.size(); row++) {
-        for(unsigned int col = 0; col < cells[0].size(); col++) availableCells.push_back(std::make_pair(row, col));
+    for(int row = 0; row < n; row++) {
+        for(int col = 0; col < n; col++) availableCells.push_back(std::make_pair(row, col));
     }
 
     std::mt19937 g(42);
     std::shuffle(availableCells.begin(), availableCells.end(), g);
 
     // 1. Choose n random positions to begin the regions
-    for(unsigned int i = 1; i <= cells.size(); i++) {
+    for(int i = 1; i <= n; i++) {
         auto pos = availableCells.front();
         auto row = pos.first;
         auto col = pos.second;
@@ -52,7 +52,7 @@ void Puzzle::generate() {
         auto dir_idx = d(g);
         auto dx = x_dir[dir_idx];
         auto dy = y_dir[dir_idx];
-        while((currRow == 0 && dx == -1) || (currCol == 0 && dy == -1) || (currRow == (int)cells.size() - 1 && dx == 1) || (currCol == (int)cells[0].size() - 1 && dy == 1)) {
+        while((currRow == 0 && dx == -1) || (currCol == 0 && dy == -1) || (currRow == n - 1 && dx == 1) || (currCol == n - 1 && dy == 1)) {
             dir_idx = d(g);
             dx = x_dir[dir_idx];
             dy = y_dir[dir_idx];
@@ -69,7 +69,11 @@ void Puzzle::generate() {
 
         its++;
     }
-    std::cout << "\n" << (cells.size() - 1) * cells[0].size() << " cells assigned in " << its << " iterations\n" << std::endl;
+    std::cout << "\n" << (n - 1) * n << " cells assigned in " << its << " iterations\n" << std::endl;
 
     // 3. Solve (validate that a single solution exists)
 }
+
+int Puzzle::size() { return n; }
+
+std::vector<std::vector<int>> Puzzle::board() { return cells; }
