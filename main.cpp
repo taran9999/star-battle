@@ -48,11 +48,30 @@ int main() {
         SDL_RenderPresent(renderer);
     }
 
-    Puzzle puzzle(CELLS_PER_AXIS);
-    puzzle.generate();
+    // Puzzle puzzle(CELLS_PER_AXIS);
+    // puzzle.generate();
+    // puzzle.printCells();
+    std::vector<std::vector<int>> cells
+    {
+        {1, 1, 2, 2, 2, 2, 3, 3},
+        {1, 1, 1, 1, 2, 2, 3, 3},
+        {1, 1, 1, 1, 4, 4, 3, 3},
+        {1, 1, 1, 1, 4, 4, 4, 5},
+        {1, 6, 6, 6, 4, 7, 7, 5},
+        {1, 6, 6, 8, 8, 8, 7, 7},
+        {1, 6, 6, 8, 8, 8, 8, 7},
+        {1, 8, 8, 8, 8, 8, 7, 7}
+    };
+    Puzzle puzzle(cells);
     puzzle.printCells();
     Solver solver;
     auto solutions = solver.solve(puzzle);
+    std::cout << "Found " << solutions.size() << " solutions" << std::endl;
+    for(auto s : solutions) {
+        std::cout << "{ ";
+        for(auto p : s) std::cout << "(" << p.first << ", " << p.second << ") ";
+        std::cout << "}\n";
+    }
 
     SDL_Event event;
     while(true) {

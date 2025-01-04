@@ -15,7 +15,7 @@ Solution& currSolution, std::vector<Solution>& solutions) {
 
     // Naive backtracking just go row by row
     auto row = starsPlaced;
-    for(auto col = 0; col < regions[row].size(); col++) {
+    for(std::size_t col = 0; col < regions[row].size(); col++) {
         auto region = regions[row][col];
         if(remainingInRow[row] > 0 && remainingInColumn[col] > 0 && remainingInRegion[region - 1] > 0) {
             remainingInRow[row]--;

@@ -9,6 +9,7 @@ class Puzzle {
         int n;
     public:
         Puzzle(int n);
+        Puzzle(std::vector<std::vector<int>> cells);
         void printCells();
         void generate();
         int size();

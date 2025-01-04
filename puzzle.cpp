@@ -5,7 +5,9 @@
 #include <algorithm>
 #include <random>
 
-Puzzle::Puzzle(int n) : cells(n, std::vector<int>(n)), n(n) { srand(42); }
+Puzzle::Puzzle(int n) : cells(n, std::vector<int>(n)), n(n) {}
+
+Puzzle::Puzzle(std::vector<std::vector<int>> cells) : cells(cells), n((int)cells.size()) {}
 
 void Puzzle::printCells() {
     for(unsigned int row = 0; row < cells.size(); row++) {
