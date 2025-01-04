@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <iostream>
+#include <stdlib.h>
 #include "grid.hpp"
 #include "puzzle.hpp"
 #include "solver.hpp"
@@ -30,23 +31,22 @@ int main() {
         return 1;
     }
 
+    int gridSize;
+    int cellSize;
+    int x;
+    int y;
     if(WINDOW_H < WINDOW_W) {
-        int gridSize = WINDOW_H - 2 * PADDING;
-        int cellSize = gridSize / CELLS_PER_AXIS;
-        int x = (WINDOW_W - gridSize) / 2;
-        // drawGrid(renderer, x, PADDING, cellSize, CELLS_PER_AXIS);
-        Grid grid(renderer, x, PADDING, CELLS_PER_AXIS, CELLS_PER_AXIS, cellSize, cellSize);
-        grid.render();
-        SDL_RenderPresent(renderer);
+        gridSize = WINDOW_H - 2 * PADDING;
+        cellSize = gridSize / CELLS_PER_AXIS;
+        x = (WINDOW_W - gridSize) / 2;
+        y = PADDING;
     } else {
-        int gridSize = WINDOW_W - 2 * PADDING;
-        int cellSize = gridSize / CELLS_PER_AXIS;
-        int y = (WINDOW_H - gridSize) / 2;
-        // drawGrid(renderer, PADDING, y, cellSize, CELLS_PER_AXIS);
-        Grid grid(renderer, PADDING, y, CELLS_PER_AXIS, CELLS_PER_AXIS, cellSize, cellSize);
-        grid.render();
-        SDL_RenderPresent(renderer);
+        gridSize = WINDOW_W - 2 * PADDING;
+        cellSize = gridSize / CELLS_PER_AXIS;
+        x = PADDING;
+        y = (WINDOW_H - gridSize) / 2;
     }
+    Grid grid(renderer, x, y, CELLS_PER_AXIS, CELLS_PER_AXIS, cellSize, cellSize);
 
     // Puzzle puzzle(CELLS_PER_AXIS);
     // puzzle.generate();
@@ -72,6 +72,28 @@ int main() {
         for(auto p : s) std::cout << "(" << p.first << ", " << p.second << ") ";
         std::cout << "}\n";
     }
+
+    srand(42);
+    std::vector<SDL_Color> randColors;
+    for(auto i = 0; i < CELLS_PER_AXIS; i++) {
+        Uint8 r = rand() % 256;
+        Uint8 g = rand() % 256;
+        Uint8 b = rand() % 256;
+        std::cout << "Random color " << i + 1 << " set to { " << unsigned(r) << ", " << unsigned(g) << ", " << unsigned(b) << " }\n";
+        randColors.push_back(SDL_Color {r, g, b, 255});
+    }
+    std::cout << std::endl;
+
+    auto board = puzzle.board();
+    // Maybe make an iterator over the board
+    for(unsigned int i = 0; i < board.size(); i++) {
+        for(unsigned int j = 0; j < board[i].size(); j++) {
+            auto val = board[i][j];
+            grid.getCell(i, j).setColor(randColors[val - 1]);
+        }
+    }
+    grid.render();
+    SDL_RenderPresent(renderer);
 
     SDL_Event event;
     while(true) {
