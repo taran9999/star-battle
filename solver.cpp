@@ -46,3 +46,7 @@ std::vector<Solution> Solver::solve(Puzzle p) {
 
     return solutions;
 }
+
+std::unordered_set<std::pair<int, int>> Solver::adjacentCells(std::vector<std::pair<int, int>> cells) {
+    std::unordered_set<std::pair<int, int>, pairHash> adj;
+}
