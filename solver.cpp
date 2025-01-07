@@ -13,11 +13,13 @@ Solution& currSolution, std::vector<Solution>& solutions) {
         return;
     }
 
+    auto adj = adjacentCells(currSolution);
+
     // Naive backtracking just go row by row
     auto row = starsPlaced;
     for(std::size_t col = 0; col < regions[row].size(); col++) {
         auto region = regions[row][col];
-        if(remainingInRow[row] > 0 && remainingInColumn[col] > 0 && remainingInRegion[region - 1] > 0) {
+        if(remainingInRow[row] > 0 && remainingInColumn[col] > 0 && remainingInRegion[region - 1] > 0 && adj.count(std::make_pair(row, col)) == 0) {
             remainingInRow[row]--;
             remainingInColumn[col]--;
             remainingInRegion[region - 1]--;
@@ -47,6 +49,17 @@ std::vector<Solution> Solver::solve(Puzzle p) {
     return solutions;
 }
 
-std::unordered_set<std::pair<int, int>> Solver::adjacentCells(std::vector<std::pair<int, int>> cells) {
+std::unordered_set<std::pair<int, int>, pairHash> Solver::adjacentCells(std::vector<std::pair<int, int>> cells) {
     std::unordered_set<std::pair<int, int>, pairHash> adj;
+
+    for(auto p : cells) {
+        auto row = p.first;
+        auto col = p.second;
+
+        for(auto r = -1; r <= 1; r++) {
+            for(auto c = -1; c <= 1; c++) adj.insert(std::make_pair(row + r, col + c));
+        }
+    }
+
+    return adj;
 }

@@ -18,9 +18,8 @@ class Solver {
         std::vector<int>& remainingInRow, std::vector<int>& remainingInColumn, std::vector<int>& remainingInRegion,
         Solution& currSolution, std::vector<Solution>& solutions);
         
-        std::unordered_set<std::pair<int, int>> adjacentCells(std::vector<std::pair<int, int>> cells);
+        std::unordered_set<std::pair<int, int>, pairHash> adjacentCells(std::vector<std::pair<int, int>> cells);
     public:
         Solver(int stars = 1);
         std::vector<Solution> solve(Puzzle p);
-        void test();
 };
