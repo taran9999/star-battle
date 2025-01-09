@@ -10,6 +10,11 @@ void GridCell::render(SDL_Renderer* renderer, int x, int y, int w, int h) {
     SDL_RenderFillRect(renderer, &rect);
 }
 
+void GridCell::scaleBgColor(double scale) {
+    SDL_Color scaledColor {(Uint8)(bgColor.r * scale), (Uint8)(bgColor.g * scale), (Uint8)(bgColor.b * scale), 255};
+    setColor(scaledColor);
+}
+
 Grid::Grid(SDL_Renderer* renderer, int x, int y, int rows, int cols, int cellW, int cellH)
     : renderer(renderer), x(x), y(y), cellW(cellW), cellH(cellH), cells(rows, std::vector<GridCell>(cols)) {}
 

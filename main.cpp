@@ -99,10 +99,7 @@ int main() {
         for(auto p : s) {
             auto i = p.first;
             auto j = p.second;
-            auto val = board[i][j];
-            auto currColor = randColors[val - 1];
-            SDL_Color darkenedColor {currColor.r / 2, currColor.g / 2, currColor.b / 2, 255};
-            grid.getCell(i, j).setColor(darkenedColor);
+            grid.getCell(i, j).scaleBgColor(0.5);
         }
     }
     grid.render();

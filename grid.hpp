@@ -8,6 +8,7 @@ class GridCell {
         GridCell(SDL_Color bgColor = {255, 255, 255, 255});
         void setColor(SDL_Color color);
         void render(SDL_Renderer* renderer, int x, int y, int w, int h);
+        void scaleBgColor(double scale);
 };
 
 class Grid {
