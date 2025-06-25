@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <chrono>
 #include <iostream>
 #include <stdlib.h>
 #include "grid.hpp"
@@ -7,7 +8,7 @@
 
 const int WINDOW_W = 800;
 const int WINDOW_H = 600;
-const int CELLS_PER_AXIS = 8;
+const int CELLS_PER_AXIS = 13;
 const int PADDING = 20;
 
 int main() {
@@ -48,30 +49,40 @@ int main() {
     }
     Grid grid(renderer, x, y, CELLS_PER_AXIS, CELLS_PER_AXIS, cellSize, cellSize);
 
-    // Puzzle puzzle(CELLS_PER_AXIS);
-    // puzzle.generate();
-    // puzzle.printCells();
-    std::vector<std::vector<int>> cells
-    {
-        {1, 1, 2, 2, 2, 2, 3, 3},
-        {1, 1, 1, 1, 2, 2, 3, 3},
-        {1, 1, 1, 1, 4, 4, 3, 3},
-        {1, 1, 1, 1, 4, 4, 4, 5},
-        {1, 6, 6, 6, 4, 7, 7, 5},
-        {1, 6, 6, 8, 8, 8, 7, 7},
-        {1, 6, 6, 8, 8, 8, 8, 7},
-        {1, 8, 8, 8, 8, 8, 7, 7}
-    };
-    Puzzle puzzle(cells);
+    Puzzle puzzle(CELLS_PER_AXIS);
+
+    auto start = std::chrono::high_resolution_clock::now();
+    puzzle.generate();
+    auto end = std::chrono::high_resolution_clock::now();
+    auto generate_time = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+
     puzzle.printCells();
+    // std::vector<std::vector<int>> cells
+    // {
+    //     {1, 1, 2, 2, 2, 2, 3, 3},
+    //     {1, 1, 1, 1, 2, 2, 3, 3},
+    //     {1, 1, 1, 1, 4, 4, 3, 3},
+    //     {1, 1, 1, 1, 4, 4, 4, 5},
+    //     {1, 6, 6, 6, 4, 7, 7, 5},
+    //     {1, 6, 6, 8, 8, 8, 7, 7},
+    //     {1, 6, 6, 8, 8, 8, 8, 7},
+    //     {1, 8, 8, 8, 8, 8, 7, 7}
+    // };
+    // Puzzle puzzle(cells);
+    // puzzle.printCells();
     Solver solver;
+
+    start = std::chrono::high_resolution_clock::now();
     auto solutions = solver.solve(puzzle);
-    std::cout << "Found " << solutions.size() << " solutions" << std::endl;
-    for(auto s : solutions) {
-        std::cout << "{ ";
-        for(auto p : s) std::cout << "(" << p.first << ", " << p.second << ") ";
-        std::cout << "}\n";
-    }
+    end = std::chrono::high_resolution_clock::now();
+    auto solve_time = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+
+    // std::cout << "Found " << solutions.size() << " solutions" << std::endl;
+    // for(auto s : solutions) {
+    //     std::cout << "{ ";
+    //     for(auto p : s) std::cout << "(" << p.first << ", " << p.second << ") ";
+    //     std::cout << "}\n";
+    // }
 
     srand(42);
     std::vector<SDL_Color> randColors;
@@ -79,10 +90,13 @@ int main() {
         Uint8 r = rand() % 256;
         Uint8 g = rand() % 256;
         Uint8 b = rand() % 256;
-        std::cout << "Random color " << i + 1 << " set to { " << unsigned(r) << ", " << unsigned(g) << ", " << unsigned(b) << " }\n";
+        // std::cout << "Random color " << i + 1 << " set to { " << unsigned(r) << ", " << unsigned(g) << ", " << unsigned(b) << " }\n";
         randColors.push_back(SDL_Color {r, g, b, 255});
     }
-    std::cout << std::endl;
+    // std::cout << std::endl;
+
+    std::cout << "generate: " << generate_time.count() << "ms" << std::endl;
+    std::cout << "solve: " << solve_time.count() << "ms" << std::endl;
 
     auto board = puzzle.board();
     // Maybe make an iterator over the board
